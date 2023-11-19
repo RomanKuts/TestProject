@@ -1,0 +1,95 @@
+﻿@using TestProject.UI.Pages.WorkOrderList.Components.AllFunctionalityButton
+@using TestProject.UI.Pages.WorkOrderList.Components.Notification
+@using TestProject.UI.Pages.WorkOrderList.Components.WorkOrderModal
+
+<h4>Work Order Details</h4>
+
+<button type="button"
+        class="btn btn-success mb-3"
+        onclick="@(() => OnCreateHandler())">
+    Create
+</button>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Visits Count</th>
+        <th>Parts Count</th>
+        <th>Update</th>
+        <th>Delete</th>
+    </tr>
+
+    @foreach (var item in WorkOrders)
+    {
+        <tr>
+            <td>
+                @item.Id
+            </td>
+
+            <td>
+                @item.Name
+            </td>
+
+            <td>
+                @item.Visits.Count()
+            </td>
+
+            <td>
+                @item.Visits.SelectMany(x => x.Parts).Count()
+            </td>
+
+            <td>
+                <button type="button"
+                        class="btn btn-primary"
+                        onclick="@(() => OnUpdateHandler(item))">
+                    Update
+                </button>
+            </td>
+
+            <td>
+                <button type="button"
+                        class="btn btn-danger"
+                        onclick="@(() => OnDeleteHandler(item.Id.Value))">
+                    Delete
+                </button>
+            </td>
+        </tr>
+    }
+</table>
+
+<div class="alert alert-danger mt-3" role="alert">
+    <ul>
+        <li>1.	Delete 5 random work orders.</li>
+        <li>2.	Delete 5 random visits.</li>
+        <li>3.	Delete 5 random parts.</li>
+        <li>4.	Change quantity of 5 random parts.</li>
+        <li>5.	Change price of 5 random parts.</li>
+    </ul>
+
+    <AllFunctionalityButton WorkOrders="@WorkOrders" 
+                            DatabaseChanged="@DatabaseChangedHandler" />
+</div>
+
+<WorkOrderModal @ref="ModalRef" 
+                DatabaseChanged="@DatabaseChangedHandler" />
+
+<Notification @ref="NotificationRef" />
+
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+</style>
